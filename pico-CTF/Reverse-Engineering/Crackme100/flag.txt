@@ -1,0 +1,1 @@
+SUCCESS! Here is your flag: picoCTF{s0lv3_angry_symb0ls_4656b68e}

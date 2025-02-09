@@ -1,0 +1,134 @@
+### STACK LAYOUT ANALYSIS
+
+RSP -> 0xA0 
+160 / 8 -> 20 QWORD
+
+---------------------------------------------------------------------------- (Higher addresses)
+
+RBP <+0>
+QWORD -20 <-8>
+QWORD -19 <-16>
+QWORD -18 <-24>
+QWORD -17 <-32>
+QWORD -16 <-40>
+QWORD -15 <-48>   <0x626c00>
+QWORD -14 <-56>  <0x787872666f786e6a>
+QWORD -13 <-64>  <0x6c72767968687364>
+QWORD -12 <-72>  <0x6c66646e6272736e>
+QWORD -11 <-80>  <0x6c67747a75786F76>
+QWORD -10 <-88>  <0x7874696579667273>
+QWORD -09 <-96>  <0x7a74716974747774>
+QWORD -08 <-104>
+QWORD -07 <-112>
+QWORD -06 <-120>
+QWORD -05 <-128>
+QWORD -04 <-136>
+QWORD -03 <-144>
+QWORD -02 <-152>
+QWORD -01 <-160>
+
+---------------------------------------------------------------------------- (Lower addresses)
+
+At rbp - 49 0x6c626a
+56 55 54 53 52 51 50 | 49 48 47 46
+                       6A 62 6C '\0'
+
+At rbp - 4 
+8 7 6 5 | 4 3 2 1
+0 0 0 0 | 0 0 0 0 (Loop counters where i and j where stored) 
+
+At rbp - 12
+16 15 14 13  | 12 11 10 09
+55 00 00 00  | 32 00 00 00 (Secret1 and length of the hardcoded encrypted string)
+
+At rbp - 24
+24 23 22 21 | 20 19 18 17
+0F 00 00 00  | 33 00 00 00 (Secret3 and Secret2)
+
+At rbp - 32
+32 31 30 29     |   28 27 26 25
+<r> <r> <r> <r> | <r> <r> <r> 61 (Ascii('a') -> 97 is 0x61)
+
+(Note) : Already 49th byte contains 6A it will again overwritten as 6A
+
+
+(Little endiann calculation):
+
+At (rbp - 96) 0x747774746971747a -> 0x7a74716974747774
+
+At (rbp - 88) 0x7372667965697478 -> 0x7874696579667273
+
+At (rbp - 80) 0x766f78757a74676c -> 0x6c67747a75786F76
+
+At (rbp - 72) 0x6e7372626e64666c -> 0x6c66646e6272736e
+
+At (rbp - 64) 0x647368687976726c -> 0x6c72767968687364
+
+At (rbp - 56) 0x6a6e786f66727878 -> 0x787872666f786e6a
+
+
+(Pesudo C code):
+
+```
+printf("Enter the password:");
+scanf("%50s", rbp - 160);
+// Length is 50
+unsigned int passlen at (rbp - 12) = strlen(rbp-96)
+
+if (!memcmp(rbp - 160, rbp - 96,50))
+printf(" SUCCESS! Here is your flag:%s\n","picoCTF{sample_flag});
+else
+ puts("FAILED!");
+
+```
+
+(Moving Secret Values):
+
+```
+  call   401040 <strlen@plt>
+  mov    DWORD PTR [rbp-0xc],eax
+  mov    DWORD PTR [rbp-0x10],0x00000055
+  mov    DWORD PTR [rbp-0x14],0x00000033
+  mov    DWORD PTR [rbp-0x18],0x0000000F
+  mov    BYTE PTR [rbp-0x19],0x61 | 'a'
+
+```
+
+(Encrypted Password in hex):
+ 
+7a 74 71 69 74 74 77 74 78 74 69 65 79 66 72 73
+6c 67 74 7a 75 78 6F 76 6c 66 64 6e 62 72 73 6e
+6c 72 76 79 68 68 73 64 78 78 72 66 6f 78 6e 6a
+62 6c 00
+
+(Encrypted Password in Ascii):
+
+ztqittwtxtieyfrslgtzuxovlfdnbrsnlrvyhhsdxxrfoxnjbl
+
+But the program is altering(Encrypting) the userinput with some math , in order to find the password that clobbered to this password we need reverse those math algorithm.
+
+(Decompiler)
+
+```
+
+for ( ; i < 3; i++)
+{
+	for(j = 0; j < 50; j++)
+	{
+		uVar1 = (j % 0xff >> 1 & 0x55) + ( j % 0xff & 0x55);
+		uVar2 = ((int)uVar1 >> 2 & 0x33) + (uVar1 & 0x33);
+		iVar2 = ((int)uVar1 >> 4) + input[j] - 'a' + (uVar1 & 0xF);
+		Input[j] = (char) iVar1 + (char) (iVar2 / 0x1a) * -0x1a + 'a';
+	}
+}
+
+```
+
+
+For more information about how the encryption works, i wore a python program, which visualize how the character mapping is done in the encryption.
+
+The encryption actually works based on the index and of the character it encrypts the same character differently based on the index, which it appears.
+
+The encryption actaully encrypting the given text(password) `3` times.  
+
+   
