@@ -125,9 +125,9 @@ for ( ; i < 3; i++)
 ```
 
 
-For more information about how the encryption works, i wore a python program, which visualize how the character mapping is done in the encryption.
+For more information about how the encryption works, i wrote a python program, which visualize how the character mapping is done in the encryption.
 
-The encryption actually works based on the index and of the character it encrypts the same character differently based on the index, which it appears.
+The encryption actually works based on the index and of the character, it encrypts the same character differently based on the index, which it appears.
 
 The encryption actaully encrypting the given text(password) `3` times.  
 
