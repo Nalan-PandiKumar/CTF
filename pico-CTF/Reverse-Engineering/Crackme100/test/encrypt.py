@@ -12,6 +12,6 @@ for i in range(0,3):
 		random1 = (j % 255 >> 1 & secret1) + ( j % 255 & secret1)
 		random1 = (random1 >> 2 & secret2) + ( random1 & secret2)
 		random2 = (random1 >> 4) + (ord(password[j]) - 97) + (random1 & secret3)
-		password[j] = chr( (random2 % 26) + 97 )
+		password[j] = chr( (random2 % 26) + 97 ) ## (char) iVar1 + (char) (iVar2 / 0x1a) * -0x1a + 'a'
 
 print(f"Encrypted password:{''.join(password)}")
