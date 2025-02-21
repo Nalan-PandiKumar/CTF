@@ -1,0 +1,132 @@
+### Stack Layout
+
+(Main's Stack frame)
+
+---------------------------------------------------------------------------- (High Addresses)
+rsp - 0x50 (80) -> 80 / 8 -> 10 QWORD
+
+rbp <+0>
+QWORD - 10  <-8>  <stack_canary>
+QWORD - 09 <-16>  '\0'
+QWORD - 08 <-24> <0x666665356664674e>
+QWORD - 07 <-32> <0x3035436047623066>
+QWORD - 06 <-40> <0x3562334638386243>
+QWORD - 05 <-48> <0x413a34407225754c>
+QWORD - 04 <-56>
+QWORD - 03 <-64>
+QWORD - 02 <-72>
+QWORD - 01 <-80> char** argv 
+
+---------------------------------------------------------------------------- (Low Addresses)
+
+(rotate_encrypt's Stack frame)
+
+---------------------------------------------------------------------------- (High Addresses)
+
+rsp - 0x30(48) -> 48 / 8 -> 6 QWORD
+rbp <+16>  <return address>
+rbp <+8>   <old_stack_frame_base>
+rbp  <+0>
+QWORD -06 <-8>    <length>
+QWORD -05 <-16>  <copy>
+QWORD -04 <-24>  <i = 0>
+QWORD -03 <-32>
+QWORD -02 <-40>  <Argument-2 / encrypted_text>
+QWORD -01 <-48>  <Argument-1 / shift>
+
+---------------------------------------------------------------------------- (Low Addresses)
+
+(rotate_encrypt)
+32 31 30 29 || 28 27 26 25
+                rbp - 28
+
+
+
+(Main)
+-> After mov    DWORD PTR [rbp-0x44],edi
+
+72 71 70 69 || 68 67 66 65
+                  <argc>
+
+Char Buffer value in stack:
+
+48 47 46 45 || 44 43 42 41
+41 3a 34 40 || 72 25 75 4c
+
+40 39 38 37 || 36 35 34 33
+35 62 33 46 || 38 38 62 43
+
+32 31 30 29 || 28 27 26 25
+30 35 43 60 || 47 62 30 66
+
+24 23 22 21 || 20 19 18 17
+66 66 65 35 || 66 64 67 4e
+
+16 15 14 13 || 12 11 10 09
+00 
+
+
+
+Hex to ASCII:
+41 3a 34 40 72 25 75 4c 35 62 33 46 38 38 62 43
+30 35 43 60  47 62 30 66 66 66 65 35 66 64 67 4e
+
+
+A:4@r%uL5b3F88bC05C`Gb0fffe5fdgN
+
+
+(Observed): Text is not meaningful, probably it may be encrypted.
+
+
+sleep(100000); pauses for 100,000 seconds (about 27.7 hours). 
+(Execution pauses for more than a day 😅, so running this file will waste your day ,But why? )
+
+-- Because they don't want us to see the, print_result return by the function rotate_encrypt , I think which may be the flag.
+
+
+(C code):
+
+```
+    	#include <stdio.h>
+    	#include <string.h>
+	#include <stdlib.h>
+	#include <unistd.h>
+
+	char* rotate_encrypt(long long int shift, int encrypted_text)
+	{
+		char* copy = strdup(encrypted_text);
+		size_t length = strlen(copy);
+		size_t i;
+		for(i = 0; i < length; i++)
+		{
+			if(copy[i] > 0x20 (32))
+			{
+				if(copy[i] != 0x7F (127))
+				{
+					int rbp - 28 = copy[i] + 0x2F (47);
+					if(rbp - 28 > 0x7E (126))
+					{
+						copy[i] = (rbp - 28) - 5E;
+					}
+					 else
+					{
+						copy[i] = (rbp - 28);
+					}
+				}
+			}
+			return copy;
+	}
+
+	int main()
+	{
+		char encrypted_text [] = "A:4@r%uL5b3F88bC05C`Gb0fffe5fdgN";
+		sleep(100000); // 27.7 Hours pause
+		char* result =  rotate_encrypt(0, encrypted_text);
+		fputs(result,stdout);
+		putchar('\n');
+		free(result);
+		return 0;
+	}
+
+
+```
