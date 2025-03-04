@@ -1,0 +1,54 @@
+    148b:       endbr64
+    148f:       push   rbp
+    1490:       mov    rbp,rsp
+    1493:       sub    rsp,0x40
+    1497:       mov    DWORD PTR [rbp-0x34],edi
+    149a:    	mov    QWORD PTR [rbp-0x40],rsi
+    149e:    	mov    rax,QWORD PTR fs:0x28
+    14a5:    	00 00
+    14a7:   	mov    QWORD PTR [rbp-0x8],rax
+    14ab:   	xor    eax,eax
+    14ad:   	lea    rdi,[rip+0xb55]        # 2009 
+    14b4:    	mov    eax,0x0
+    14b9:   	call   10b0 <printf@plt>
+    14be:  	mov    rdx,QWORD PTR [rip+0x2b4b]  #4010     <stdin@GLIBC_2.2.5>
+    14c5:       lea    rax,[rbp-0x30]
+    14c9:       mov    esi,0x25
+    14ce:       mov    rdi,rax
+    14d1:       call   10d0 <fgets@plt>
+    14d6:       lea    rax,[rbp-0x30]
+    14da:       mov    rdi,rax
+    14dd:       call   1209 <__stack_chk_fail@plt+0xf9>
+    14e2:       test   al,al
+    14e4:       je  14f4 <__stack_chk_fail@plt+0x3e4>
+    14e6:       lea    rdi,[rip+0xb35]    # 2022 
+    14ed:       call   10c0 <puts@plt>
+    14f2:       jmp 1500 <__stack_chk_fail@plt+0x3f0>
+    14f4:       lea    rdi,[rip+0xb3a]   # 2035
+    14fb:       call   10c0 <puts@plt>
+    1500:       mov    eax,0x0
+    1505:       mov    rcx,QWORD PTR [rbp-0x8]
+    1509:       xor    rcx,QWORD PTR fs:0x28
+    1510:       00 00
+    1512:     	je 1519 <__stack_chk_fail@plt+0x409>
+    1514:    	call   1110 <__stack_chk_fail@plt>
+    1519:     	leave
+    151a:     	ret
+
+
+int main()
+{
+	char input[36];
+	printf("Enter your license key: ");
+	fgets(input,37, stdin);
+	int result = verify_key(input); // offset 1209 from .text segment
+	if(result == 0)
+	{
+		puts("That key is invalid.");
+	}
+	else
+	{
+		puts("That key is valid.");
+	}
+	return EXIT_SUCCESS;
+}

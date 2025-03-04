@@ -1,0 +1,159 @@
+Verify_key stack layout:
+
+RSP - 0xE0 (224) -> 224 / 8 -> <28 QWORD>
+rbp                              <+  0>
+28 - QWORD              <-  8>    <stack canary>
+27 - QWORD              <- 16>
+26 - QWORD              <- 24>
+25 - QWORD              <- 32>
+24 - QWORD              <- 40>
+23 - QWORD              <- 48> full_flag
+22 - QWORD              <- 56>
+21 - QWORD              <- 64>
+20 - QWORD              <- 72>
+19 - QWORD              <- 80> <hash_2_string>
+18 - QWORD              <- 88>
+17 - QWORD              <- 96>
+16 - QWORD              <-104>
+15 - QWORD              <-112> <hash_1_string>
+14 - QWORD              <-120> 33795f00
+13 - QWORD              <-128> 75725f30776e5f6b
+12 - QWORD              <-136> 6272316e675f7930
+11 - QWORD              <-144> 7069636f4354467b
+10 - QWORD              <-152>
+09 - QWORD              <-160> <hash_2>
+08 - QWORD              <-168>
+07 - QWORD              <-176> <hash_1>
+06 - QWORD              <-184> m,<bracket>
+05 - QWORD              <-192> k,l
+04 - QWORD              <-200> j,i
+03 - QWORD              <-208>
+02 - QWORD              <-216> <Input> (ptr)
+01 - QWORD              <-224>
+
+
+144 143 142 141 | 140 139 138 137
+  70 69 63 6f   |   43 54 46 7b
+
+136 135 134 133 | 132 131 130 129
+  62 72 31 6e   |    67 5f 79 30
+
+128 127 126 125 | 124 123 122 121
+  75 72 5f 30   |   77 6e 5f 6b
+
+Lower DWORD rbp - 120
+120 119 118 117  | 116 115 114 113
+   33 79 5f 00
+
+Upper WORD rbp - 178
+184 183 182 181 | 180 179 178 177
+  00 00 00 00   |          7D  00 -> }\0
+
+rbp - 200
+200 199 198 197 | 196 195 194 193
+   00 00 00 00  |    00 00 00 00
+
+Upper DWORD rbp - 192
+192 191 190 189 | 188 187 186 185
+                |    00 00 00 00
+
+
+partial flag: picoCTF{br1ng_y0ur_0wn_k3y_\0
+remaining characters are randomly fetched from hash of the flag:
+
+```verify_key
+int verify_key(char* input)
+{
+        char flag[] = "picoCTF{br1ng_y0ur_0wn_k3y_";
+        char hash_1[MD5_DIGEST_LENGTH];
+        MD5(flag,strlen(flag),hash_1);
+        char bracket[] = "}";
+        char hash_2[MD5_DIGEST_LENGTH];
+        MD5(bracket,strlen(bracket),hash_2);
+        char hash_1_string[32];
+        int j = 0;
+        for(int i = 0; i <= 15; i++)
+        {
+                sprintf( hash_1_string+ j, "%02x",hash_1[i]);
+                j +=  2;
+        }
+        j = 0;
+        char hash_2_string[32];
+        for(int k = 0; k <= 15; k++)
+        {
+                sprintf(hash_2_string + j, "%02x",hash_2[i]);
+                j += 2;
+        }
+        char full_flag[36];
+        for(int l = 0; l <= 26; l++)
+        {
+                full_flag[l] = flag[l];
+        }
+        full_flag[27] = hash_1_string[18];
+        full_flag[28] = hash_1_string[26];
+        full_flag[29] = hash_1_string[25];
+
+        full_flag[30] = hash_1_string[0];
+        full_flag[31] = hash_1_string[26];
+        full_flag[32] = hash_1_string[18];
+
+        full_flag[33] = hash_1_string[12];
+        full_flag[34] = hash_1_string[26];
+        full_flag[35] = bracket[0];
+        full_flag[35] = '\0';
+
+        if(strlen(flag) != 36)
+                return 0;
+
+        for(int m= 0; m <= 35; m++)
+        {
+                if(input[m] != full_flag[m])
+                        return 0;
+        }
+}
+```
+
+Main's Stack layout
+RSP - 0x40 (64) -> 64 / 8 -> 8 QWORD
+rbp                            <+ 0>
+8 - QWORD               <- 8> <stack_canary>
+7 - QWORD               <-16>
+6 - QWORD               <-24>
+5 - QWORD               <-32>
+4 - QWORD               <-40>
+3 - QWORD               <-48>   input
+2 - QWORD               <-56>   argc
+1 - QWORD               <-64> **argv
+
+rbp - 52
+Upper DWORD
+56 55 54 53 | 52 51 50 49
+                      |  <argc>
+
+input :
+48 47 46 45 | 44 43 42 41 | 40 39 38 37 | 36 35 34 33 | 32 31 30 29 | 28 27 26 25 | 24 23 22 21 | 20 19 18 17 | 16 15 14 13 | 12
+
+
+```main
+int main()
+{
+        char input[36];
+        printf("Enter your license key: ");
+        fgets(input,37, stdin);
+        int result = verify_key(input); // offset 1209 from .text segment
+        if(result == 0)
+        {
+                puts("That key is invalid.");
+        }
+        else
+        {
+                puts("That key is valid.");
+        }
+        return EXIT_SUCCESS;
+}
+
+```
+
+
+
+Offsets = "0x5e 0x56 0x57 0x70 0x56 0x5e 0x64 0x56" 

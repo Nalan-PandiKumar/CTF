@@ -1,0 +1,201 @@
+ 1209:     endbr64
+ 120d:     push   rbp
+ 120e:     mov    rbp,rsp
+ 1211:     sub    rsp,0xe0
+ 1218:     mov    QWORD PTR [rbp-0xd8],rdi
+ 121f:     mov    rax,QWORD PTR fs:0x28
+ 1226:     00 00
+ 1228:     mov    QWORD PTR [rbp-0x8],rax
+ 122c:     xor    eax,eax
+ 122e:     movabs rax,0x7b4654436f636970
+ 1235:     54 46 7b
+ 1238:     movabs rdx,0x30795f676e317262
+ 123f:     5f 79 30
+ 1242:     mov    QWORD PTR [rbp-0x90],rax
+ 1249:     mov    QWORD PTR [rbp-0x88],rdx
+ 1250:     movabs rax,0x6b5f6e77305f7275
+ 1257:     6e 5f 6b
+ 125a:     mov    QWORD PTR [rbp-0x80],rax
+ 125e:     mov    DWORD PTR [rbp-0x78],0x5f7933
+ 1265:     mov    WORD PTR [rbp-0xb2],0x7d
+ 126c:     7d 00
+ 126e:     lea    rax,[rbp-0x90]
+ 1275:     mov    rdi,rax
+ 1278:     call   10e0 <strlen@plt>
+ 127d:     mov    rcx,rax
+ 1280:     lea    rdx,[rbp-0xb0]
+ 1287:     lea    rax,[rbp-0x90]
+ 128e:     mov    rsi,rcx
+ 1291:     mov    rdi,rax
+ 1294:     call   10f0 <MD5@plt>
+ 1299:     lea    rax,[rbp-0xb2]
+ 12a0:     mov    rdi,rax
+ 12a3:     call   10e0 <strlen@plt>
+ 12a8:     mov    rcx,rax
+ 12ab:     lea    rdx,[rbp-0xa0]
+ 12b2:     lea    rax,[rbp-0xb2]
+ 12b9:     mov    rsi,rcx
+ 12bc:     mov    rdi,rax
+ 12bf:     call   10f0 <MD5@plt>
+ 12c4:     mov    DWORD PTR [rbp-0xc8],0x0
+ 12cb:     00 00 00
+ 12ce:     mov    DWORD PTR [rbp-0xc4],0x0
+ 12d5:     00 00 00
+ 12d8:     jmp    1321 
+ 12da:     mov    eax,DWORD PTR [rbp-0xc4]
+ 12e0:     cdqe
+ 12e2:     movzx  eax,BYTE PTR [rbp+rax*1-0xb0]
+ 12e9:     ff
+ 12ea:     movzx  eax,al
+ 12ed:     lea    rcx,[rbp-0x70]
+ 12f1:     mov    edx,DWORD PTR [rbp-0xc8]
+ 12f7:     movsxd rdx,edx
+ 12fa:     add    rcx,rdx
+ 12fd:     mov    edx,eax
+ 12ff:     lea    rsi,[rip+0xcfe]        # 2004 
+ 1306:     mov    rdi,rcx
+ 1309:     mov    eax,0x0
+ 130e:     call   1100 <sprintf@plt>
+ 1313:     add    DWORD PTR [rbp-0xc4],0x1
+ 131a:     add    DWORD PTR [rbp-0xc8],0x2
+ 1321:     cmp    DWORD PTR [rbp-0xc4],0xf
+ 1328:     jle    12da 
+ 132a:     mov    DWORD PTR [rbp-0xc8],0x0
+ 1331:     00 00 00
+ 1334:     mov    DWORD PTR [rbp-0xc0],0x0
+ 133b:     00 00 00
+ 133e:     jmp    1387 
+ 1340:     mov    eax,DWORD PTR [rbp-0xc0]
+ 1346:     cdqe
+ 1348:     movzx  eax,BYTE PTR [rbp+rax*1-0xa0]
+ 134f:     ff
+ 1350:     movzx  eax,al
+ 1353:     lea    rcx,[rbp-0x50]
+ 1357:     mov    edx,DWORD PTR [rbp-0xc8]
+ 135d:     movsxd rdx,edx
+ 1360:     add    rcx,rdx
+ 1363:     mov    edx,eax
+ 1365:     lea    rsi,[rip+0xc98]        # 2004 
+ 136c:     mov    rdi,rcx
+ 136f:     mov    eax,0x0
+ 1374:     call   1100 <sprintf@plt>
+ 1379:     add    DWORD PTR [rbp-0xc0],0x1
+ 1380:     add    DWORD PTR [rbp-0xc8],0x2
+ 1387:     cmp    DWORD PTR [rbp-0xc0],0xf
+ 138e:     jle    1340 
+ 1390:     mov    DWORD PTR [rbp-0xbc],0x0
+ 1397:     00 00 00
+ 139a:     jmp    13bf 
+ 139c:     mov    eax,DWORD PTR [rbp-0xbc]
+ 13a2:     cdqe
+ 13a4:     movzx  edx,BYTE PTR [rbp+rax*1-0x90]
+ 13ab:     ff
+ 13ac:     mov    eax,DWORD PTR [rbp-0xbc]
+ 13b2:     cdqe
+ 13b4:     mov    BYTE PTR [rbp+rax*1-0x30],dl
+ 13b8:     add    DWORD PTR [rbp-0xbc],0x1
+ 13bf:     cmp    DWORD PTR [rbp-0xbc],0x1a
+ 13c6:     jle    139c 
+ 13c8:     movzx  eax,BYTE PTR [rbp-0x5e]
+ 13cc:     mov    BYTE PTR [rbp-0x15],al
+ 13cf:     movzx  eax,BYTE PTR [rbp-0x56]
+ 13d3:     mov    BYTE PTR [rbp-0x14],al
+ 13d6:     movzx  eax,BYTE PTR [rbp-0x57]
+ 13da:     mov    BYTE PTR [rbp-0x13],al
+ 13dd:     movzx  eax,BYTE PTR [rbp-0x70]
+ 13e1:     mov    BYTE PTR [rbp-0x12],al
+ 13e4:     movzx  eax,BYTE PTR [rbp-0x56]
+ 13e8:     mov    BYTE PTR [rbp-0x11],al
+ 13eb:     movzx  eax,BYTE PTR [rbp-0x5e]
+ 13ef:     mov    BYTE PTR [rbp-0x10],al
+ 13f2:     movzx  eax,BYTE PTR [rbp-0x64]
+ 13f6:     mov    BYTE PTR [rbp-0xf],al
+ 13f9:     movzx  eax,BYTE PTR [rbp-0x56]
+ 13fd:     mov    BYTE PTR [rbp-0xe],al
+ 1400:     movzx  eax,BYTE PTR [rbp-0xb2]
+ 1407:     mov    BYTE PTR [rbp-0xd],al
+ 140a:     mov    rax,QWORD PTR [rbp-0xd8]
+ 1411:     mov    rdi,rax
+ 1414:     call   10e0 <strlen@plt>
+ 1419:     cmp    rax,0x24
+ 141d:     je     1426
+ 141f:     mov    eax,0x0
+ 1424:     jmp    1475 
+ 1426:     mov    DWORD PTR [rbp-0xb8],0x0
+ 142d:     00 00 00
+ 1430:     jmp    1467 
+ 1432:     mov    eax,DWORD PTR [rbp-0xb8]
+ 1438:     movsxd rdx,eax
+ 143b:     mov    rax,QWORD PTR [rbp-0xd8]
+ 1442:     add    rax,rdx
+ 1445:     movzx  edx,BYTE PTR [rax]
+ 1448:     mov    eax,DWORD PTR [rbp-0xb8]
+ 144e:     cdqe
+ 1450:     movzx  eax,BYTE PTR [rbp+rax*1-0x30]
+ 1455:     cmp    dl,al
+ 1457:     je     1460 
+ 1459:     mov    eax,0x0
+ 145e:     jmp    1475 
+ 1460:     add    DWORD PTR [rbp-0xb8],0x1
+ 1467:     cmp    DWORD PTR [rbp-0xb8],0x23
+ 146e:     jle    1432 
+ 1470:     mov    eax,0x1
+ 1475:     mov    rsi,QWORD PTR [rbp-0x8]
+ 1479:     xor    rsi,QWORD PTR fs:0x28
+ 1480:     00 00
+ 1482:     je     1489 
+ 1484:     call   1110 <__stack_chk_fail@plt>
+ 1489:     leave
+ 148a:     ret
+
+
+
+int verify_key(char* input)
+{
+	char flag[] = "picoCTF{br1ng_y0ur_0wn_k3y_";
+	char hash_1[MD5_DIGEST_LENGTH];
+	MD5(flag,strlen(flag),hash_1);
+	char bracket[] = "}";
+	char hash_2[MD5_DIGEST_LENGTH];
+	MD5(bracket,strlen(bracket),hash_2);
+	char hash_1_string[32];
+	int j = 0;
+	for(int i = 0; i <= 15; i++)
+	{
+		sprintf( hash_1_string+ j, "%02x",hash_1[i]);
+		j +=  2;
+	}
+	j = 0;
+	char hash_2_string[32];
+	for(int k = 0; k <= 15; k++)
+	{
+		sprintf(hash_2_string + j, "%02x",hash_2[i]);
+		j += 2;
+	}
+	char full_flag[36];
+	for(int l = 0; l <= 26; l++)
+	{
+		full_flag[l] = flag[l];
+	}
+	full_flag[27] = hash_1_string[18]; 
+	full_flag[28] = hash_1_string[26]; 
+	full_flag[29] = hash_1_string[25]; 
+
+	full_flag[30] = hash_1_string[0]; 
+	full_flag[31] = hash_1_string[26]; 
+	full_flag[32] = hash_1_string[18]; 
+
+	full_flag[33] = hash_1_string[12]; 
+	full_flag[34] = hash_1_string[26]; 
+	full_flag[35] = bracket[0]; 
+	full_flag[35] = '\0';
+
+	if(strlen(flag) != 36)
+		return 0;
+
+	for(int m= 0; m <= 35; m++)
+	{
+		if(input[m] != full_flag[m])
+			return 0;
+	}
+}

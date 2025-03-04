@@ -1,0 +1,1 @@
+flag:picoCTF{br1ng_y0ur_0wn_k3y_9d74d90d}
