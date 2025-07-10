@@ -1,21 +1,23 @@
-#### 32 characters are encode as 4 characters per single integer.
-#### These are the 8 integers in the source code which are encoded from 32 characters
+# Decode vault-door-7 password from packed integers
+integers = [
+    1096770097,
+    1952395366,
+    1600270708,
+    1601398833,
+    1716808014,
+    1734293296,
+    842413104,
+    1684157793
+]
 
+password = ""
+for n in integers:
+    # Extract each byte in big-endian order
+    byte0 = (n >> 24) & 0xFF
+    byte1 = (n >> 16) & 0xFF
+    byte2 = (n >> 8) & 0xFF
+    byte3 = n & 0xFF
+    password += chr(byte0) + chr(byte1) + chr(byte2) + chr(byte3)
 
-Encoded_data = [1096770097, 1952395366, 1600270708, 1601398833, 1716808014, 1734293296,  842413104, 1684157793]
-
-
-def decode(Encoded_data:list[int])->str:
-	Decoded_str = str()
-	lower_byte_mask = 0xFF
-
-	for data in Encoded_data:
-		Decoded_str += (chr(data >> 24) + chr((data >> 16) & lower_byte_mask) + chr((data >> 8) & lower_byte_mask) + chr(data & lower_byte_mask))
-
-	return Decoded_str
-
-### Entry point
-def  main():
-	print(f'flag:picoCTF{{{decode(Encoded_data)}}}')
-
-main()
+print("Decoded password:", password)
+print("Full flag: picoCTF{" + password + "}")
