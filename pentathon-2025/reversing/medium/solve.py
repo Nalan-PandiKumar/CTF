@@ -2,13 +2,13 @@
 # solve_maze.py
 # Reads struct direction[] from a binary and searches for a path from pos 0 to target 0x28
 # struct direction { int a; int w; int s; int d; } (little-endian)
-# Each struct = 16 bytes. data offset default = 0x21e0 (as you found).
+# Each struct = 16 bytes. data offset default = 0x21e0.
 
 import sys
 import struct
 from collections import deque
 
-DATA_OFFSET = 0x21e0     # as reported in the disassembly
+DATA_OFFSET = 0x21e0     # data offset from the disassembly
 STRUCT_SIZE = 16         # 4 ints * 4 bytes
 DEFAULT_COUNT = 39       # how many structs to attempt to read (adjust if needed)
 TARGET = 0x28            # target position the binary checks for
